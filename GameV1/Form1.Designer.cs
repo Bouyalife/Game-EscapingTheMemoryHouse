@@ -105,8 +105,7 @@ namespace GameV1
             this.letterLabel.Name = "letterLabel";
             this.letterLabel.Size = new System.Drawing.Size(1373, 27);
             this.letterLabel.TabIndex = 5;
-            this.letterLabel.Text = "We got your waifu pillow mr onana, bring me the virgin waifu misstress Okaniwa to" +
-    " the temple unharmed and a trade will be made.";
+            this.letterLabel.Text = "";
             this.letterLabel.Visible = false;
             // 
             // Form1
