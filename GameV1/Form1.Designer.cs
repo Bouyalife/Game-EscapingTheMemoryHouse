@@ -74,7 +74,7 @@ namespace GameV1
             this.playerBox.Image = global::GameV1.Properties.Resources.walkRight1;
             this.playerBox.Location = new System.Drawing.Point(55, 50);
             this.playerBox.Name = "playerBox";
-            this.playerBox.Size = new System.Drawing.Size(64, 64);
+            this.playerBox.Size = new System.Drawing.Size(35, 64);
             this.playerBox.TabIndex = 3;
             this.playerBox.TabStop = false;
             this.playerBox.Tag = "player";
@@ -103,9 +103,8 @@ namespace GameV1
             this.letterLabel.Font = new System.Drawing.Font("Arial Black", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.letterLabel.Location = new System.Drawing.Point(268, 224);
             this.letterLabel.Name = "letterLabel";
-            this.letterLabel.Size = new System.Drawing.Size(1373, 27);
+            this.letterLabel.Size = new System.Drawing.Size(0, 27);
             this.letterLabel.TabIndex = 5;
-            this.letterLabel.Text = "";
             this.letterLabel.Visible = false;
             // 
             // Form1
@@ -129,7 +128,6 @@ namespace GameV1
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyUp);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mouseClick);
-
             ((System.ComponentModel.ISupportInitialize)(this.playerBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
