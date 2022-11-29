@@ -4,13 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading;
-using System.Security.Cryptography.X509Certificates;
-using System.Collections;
 using System.Collections.Generic;
-using System.Timers;
-using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
-using System.Security.Cryptography;
 
 namespace GameV1
 {
@@ -37,34 +31,28 @@ namespace GameV1
         System.Windows.Forms.Timer timer1;
         int walk = 0;
         private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        {}
         public Form1()
         {
             InitializeComponent();
             mapArray = Directory.GetFiles(filePath, "*.*");
             timer = new System.Windows.Forms.Timer();
             timer1 = new System.Windows.Forms.Timer();
-
-            timer.Tick += new EventHandler(timerEvent);
-            timer.Interval = 1500;
-
-            // Conversation on game start
-            if (!conversationsBoolean[0] && currentMap == 0)
-            {
-                ConversationLabel.Visible = true;
-                timer1.Tick += new EventHandler(conversation1);
-                timer1.Interval = 1500;
-                timer1.Start();
-            }
         }
 
         private void mouseClick(object sender, MouseEventArgs e)
         {
-            mouseClicked = true;
-            timer.Start();
+            Thread thread = new Thread(new ThreadStart(mouseCliked));
+            thread.Start();
         }
+
+        private void mouseCliked()
+        {
+            mouseClicked = true;
+            System.Threading.Thread.Sleep(100);
+            mouseClicked = false;
+        }
+
         private void keyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.W)
@@ -103,101 +91,11 @@ namespace GameV1
             }
         }
 
-        int k = 0;
-        void timerEvent(object source, EventArgs e)
-        {
-            k++;
-            if (ConversationLabel.Visible == true)
-            {
-                ConversationLabel.Visible = false;
-            }
-            if(k == 2)
-            {
-                k = 0;
-                interaction = false;
-                conversation = false;
-                timer.Stop();
-            }
-            if (mouseClicked)
-            {
-                mouseClicked = !mouseClicked;
-            }
-        }
-
-        int conversation1N = 0;
-        void conversation1(object source, EventArgs e)
-        {
-            switch (conversation1N++)
-            {
-                case 0: { 
-                        conversation = true;
-                        Console.WriteLine("ffgfgergergaergeagr");
-                        ConversationLabel.Text = "Hmm, where am i?";
-                    }
-                    break;
-                case 1: ConversationLabel.Text = "Why am I here?!";
-                    break;
-                case 2: ConversationLabel.Text = "Feels like I've been here before.";
-                    break;
-                case 3:
-                    {
-                        conversationsBoolean[0] = true;
-
-                        ConversationLabel.Visible = false;
-                        conversation = false;
-                        timer1.Stop();
-                    }
-                    break;
-
-            }
-        }
-
-        int conversation2N = 0;
-        void conversation2(object source, EventArgs e)
-        {
-            ConversationLabel.Visible = true;
-
-            Console.WriteLine("GEGLAEGLFDGDFG");
-            switch (conversation2N++)
-            {
-                case 0:
-                    {
-                        conversation = true; 
-                        ConversationLabel.Text = "I need to find a way out of here.";
-                    }
-                    break;
-                case 1: ConversationLabel.Text = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-                    break;
-                case 2:
-                    {
-                        conversationsBoolean[0] = true;
-                        ConversationLabel.Visible = false;
-                        conversation = false;
-                        Console.WriteLine("här");
-                        timer1.Stop();
-                    }
-                    break;
-            }   
-        }
-        void scrollTimer(object source, EventArgs e)
-        {
-            if (letterLabel.Text.Length == 0)
-            {
-                Console.WriteLine("fffffffsadsdfasdfasdf");
-                timer1.Stop();
-            }
-            else
-            {
-                letterLabel.Text = letterLabel.Text.Substring(1, letterLabel.Text.Length - 1);
-            }
-        }
-
         void openDoor(int currentMap)
         {
             // Show doors on each level
             if (doors[currentMap] && doorValue == 0)
             {
-                Console.WriteLine(" OpenDoorFunction " + currentMap);
                 PictureBox pb = new PictureBox();
                 pb.Tag = "Door";
                 pb.Image = Properties.Resources.doorROpen;
@@ -241,7 +139,6 @@ namespace GameV1
 
         public void gameTimerEvent(object sender, EventArgs e)
         {
-
             Bitmap bm = new Bitmap(mapArray[currentMap]);
             if (!conversation) {
                 if (right)
@@ -340,11 +237,12 @@ namespace GameV1
                     {
                         if ((((PictureBox)x).Bounds.IntersectsWith(((PictureBox)j).Bounds)))
                         {
+
+
                             letterLabel.Visible = true;
                             letterLabel.Text = "..TEST1TEST2TEST3test4";
-                            timer1.Interval = 500;
-                            timer1.Tick += new EventHandler(scrollTimer);
-                            timer1.Start();
+                            Thread thread = new Thread(new ThreadStart(scrollTimer));
+                            thread.Start();
                             x.Dispose();
                             this.Controls.Remove(x);
                         }
@@ -354,13 +252,22 @@ namespace GameV1
             // Level 1
             if(currentMap == 0)
             {
+                // Conversation on game start
+                if (!conversationsBoolean[0] && currentMap == 0)
+                {
+                    conversationsBoolean[0] = true;
+                    ConversationLabel.Visible = true;
+                    Thread thread = new Thread(new ThreadStart(conversation1));
+                    thread.Start();
+                }
+
                 if ((Math.Sqrt(Math.Pow((252 - playerBox.Location.X), 2) + Math.Pow((129 - playerBox.Location.Y), 2)) < 50) && currentMap == 0 && !interaction)
                 {
                     ConversationLabel.Visible = true;
                     ConversationLabel.Text = "Strange. It's a picture of me and my daughter.";
+                    Thread thread = new Thread(new ThreadStart(timerEvent));
+                    thread.Start();
                     interaction = true;
-
-                    timer.Start();
                 }
                 else if ((Math.Sqrt(Math.Pow((595 - playerBox.Location.X), 2) + Math.Pow((250 - playerBox.Location.Y), 2)) <= 100) && currentMap == 0 && !interaction)
                 {
@@ -373,18 +280,20 @@ namespace GameV1
                     {
                         ConversationLabel.Visible = true;
                         ConversationLabel.Text = "The door is locked";
+                        Thread thread = new Thread(new ThreadStart(timerEvent));
+                        thread.Start();
                     }
 
                     interaction = true;
-                    timer.Start();
                 }
                 else if ((Math.Sqrt(Math.Pow((550 - playerBox.Location.X), 2) + Math.Pow((425 - playerBox.Location.Y), 2)) <= 80) && currentMap == 0 && !interaction)
                 {
+                    interaction = true;
                     ConversationLabel.Visible = true;
                     ConversationLabel.Text = "fuck empty!";
-                    interaction = true;
 
-                    timer.Start();
+                    Thread thread = new Thread(new ThreadStart(timerEvent));
+                    thread.Start();
                 }
 
                 if ((Math.Sqrt(Math.Pow((530 - playerBox.Location.X), 2) + Math.Pow((60 - playerBox.Location.Y), 2)) <= 80) && currentMap == 0 && mouseClicked)
@@ -402,20 +311,216 @@ namespace GameV1
                         keys[0] = true;
                         ConversationLabel.Visible = true;
                     }
-                    timer.Start();
+
+                    Thread thread = new Thread(new ThreadStart(timerEvent));
+                    thread.Start();
                 }
             }
             else if(currentMap == 1)
             {
                 if (!conversationsBoolean[1] && currentMap == 1)
                 {
-                    timer1.Tick += new EventHandler(conversation2);
-                    timer1.Interval = 2500;
-                    timer1.Start();
                     conversationsBoolean[1] = true;
+                    ConversationLabel.Visible = true;
+                    Thread thread = new Thread(new ThreadStart(conversation2));
+                    thread.Start();
+                }
+                if ((Math.Sqrt(Math.Pow((330 - playerBox.Location.X), 2) + Math.Pow((155 - playerBox.Location.Y), 2)) <= 80) && currentMap == 1 && mouseClicked)
+                {
+                    Rectangle rec = new Rectangle(315, 115, 44, 42);
+                    if (rec.Contains(this.PointToClient(Cursor.Position)) && !keys[1])
+                    {
+                        ConversationLabel.Visible = true;
+                        Thread thread = new Thread(new ThreadStart(lockedDrawer));
+                        thread.Start();
+
+                    }
                 }
             }
-            
+        }
+        void timerEvent()
+        {
+            int k1 = 0;
+
+            while (k1++ < 10)
+            {
+                if (k1 == 9)
+                {
+                    if (ConversationLabel.Visible == true)
+                    {
+                        ConversationLabel.Invoke((MethodInvoker)(() =>
+                        {
+                            ConversationLabel.Visible = false;
+                        }));
+                    }
+                    k1 = 0;
+                    interaction = false;
+                    conversation = false;
+                    return;
+                }
+                System.Threading.Thread.Sleep(100);
+
+            }
+        }
+
+        void conversation1()
+        {
+            int conversation1N = 0;
+
+            while (conversation1N < 4)
+            {
+                switch (conversation1N++)
+                {
+                    case 0:
+                        {
+                            conversation = true;
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Hmm, where am I?";
+                            }));
+                        }
+                        break;
+                    case 1:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Why am I here?!";
+                            }));
+                        }
+                        break;
+                    case 2:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Feels like I've been here before.";
+                            }));
+                        }
+                        break;
+                    case 3:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Visible = false;
+                            }));
+                            conversation = false;
+                        }
+                        break;
+                }
+                System.Threading.Thread.Sleep(2000);
+            }
+        }
+
+        void conversation2()
+        {
+            int conversation2N = 0;
+
+            while (conversation2N < 4)
+            {
+                switch (conversation2N++)
+                {
+                    case 0:
+                        {
+                            conversation = true;
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Fuck me I need to get out of here";
+                            }));
+                        }
+                        break;
+                    case 1:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Feels like I've been here before.";
+                            }));
+
+                        }
+                        break;
+                    case 2:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "Isn't this my kithchen?";
+                            }));
+
+                        }
+                        break;
+                    case 3:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Visible = false;
+                            }));
+                            conversation = false;
+                        }
+                        break;
+                }
+                System.Threading.Thread.Sleep(2000);
+            }
+        }
+
+        void scrollTimer()
+        {
+            int n = 0;
+            int length = 0;
+
+            letterLabel.Invoke((MethodInvoker)(() =>
+            {
+                length = letterLabel.Text.Length;
+            }));
+
+            while (n++ < length)
+            {
+                letterLabel.Invoke((MethodInvoker)(() =>
+                {
+                    letterLabel.Text = letterLabel.Text.Substring(1, letterLabel.Text.Length - 1);
+                }));
+                System.Threading.Thread.Sleep(250);
+            }
+        }
+
+        private void lockedDrawer()
+        {
+            int k = 0;
+            while (k < 4)
+            {
+                switch (k++)
+                {
+                    case 0:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "hmm It's locked.";
+                            }));
+                        }
+                        break;
+                    case 1:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "hmm It's locked1.";
+                            }));
+                        }                      
+                        break;
+                    case 2:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Text = "hmm It's locked2.";
+                            }));
+                        }
+                        break;
+                    case 3:
+                        {
+                            ConversationLabel.Invoke((MethodInvoker)(() =>
+                            {
+                                ConversationLabel.Visible = false;
+                            }));
+                        }
+                        break;
+                }
+                System.Threading.Thread.Sleep(2000);
+            }
         }
     }
 }
