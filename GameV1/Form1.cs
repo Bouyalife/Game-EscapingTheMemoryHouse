@@ -288,7 +288,7 @@ namespace GameV1
 
                     interaction = true;
                 }
-                else if ((Math.Sqrt(Math.Pow((550 - playerBox.Location.X), 2) + Math.Pow((425 - playerBox.Location.Y), 2)) <= 80) && currentMap == 0 && !interaction)
+                else if ((Math.Sqrt(Math.Pow((550 - playerBox.Location.X), 2) + Math.Pow((427 - playerBox.Location.Y), 2)) <= 80) && currentMap == 0 && !interaction)
                 {
                     interaction = true;
                     ConversationLabel.Visible = true;
