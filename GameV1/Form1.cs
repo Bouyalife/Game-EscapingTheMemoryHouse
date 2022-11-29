@@ -22,7 +22,7 @@ namespace GameV1
         string filePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, "Resources\\map");
         Boolean left = false, right = false, up = false, down = false;
 
-        int movementSpeed = 5;
+        int movementSpeed = 3;
         int currentMap = 0;
         Boolean conversation = false;
         Boolean[] conversationsBoolean = { false, false };
@@ -208,6 +208,36 @@ namespace GameV1
                 doorValue = 1;
             }
         }
+        void walkAnimationRight()
+        {
+            if (walk == 0)
+            {
+                playerBox.Image = Properties.Resources.walkRight2;
+                System.Threading.Thread.Sleep(300);
+                walk = 1;
+            }
+            else
+            {
+                playerBox.Image = Properties.Resources.walkRight1;
+                System.Threading.Thread.Sleep(300);
+                walk = 0;
+            }
+        }
+        void walkAnimationLeft()
+        {
+            if (walk == 0)
+            {
+                playerBox.Image = Properties.Resources.walkLeft2;
+                System.Threading.Thread.Sleep(300);
+                walk = 1;
+            }
+            else
+            {
+                playerBox.Image = Properties.Resources.walkLeft1;
+                System.Threading.Thread.Sleep(300);
+                walk = 0;
+            }
+        }
 
         public void gameTimerEvent(object sender, EventArgs e)
         {
@@ -223,16 +253,9 @@ namespace GameV1
                     }
                     else
                     {
-                        if (walk == 0)
-                        {
-                            playerBox.Image = Properties.Resources.walkRight2;
-                            walk = 1;
-                        }
-                        else
-                        {
-                            playerBox.Image = Properties.Resources.walkRight1;
-                            walk = 0;
-                        }
+
+                        Thread thread = new Thread(new ThreadStart(walkAnimationRight));
+                        thread.Start();
                         playerBox.Left += movementSpeed;
                     }
                 }
@@ -256,16 +279,8 @@ namespace GameV1
                     }
                     else
                     {
-                        if (walk == 0)
-                        {
-                            playerBox.Image = Properties.Resources.walkLeft2;
-                            walk = 1;
-                        }
-                        else
-                        {
-                            playerBox.Image = Properties.Resources.walkLeft1;
-                            walk = 0;
-                        }
+                        Thread thread = new Thread(new ThreadStart(walkAnimationLeft));
+                        thread.Start();
                         playerBox.Left -= movementSpeed;
                     }
                 }
