@@ -246,8 +246,8 @@ namespace GameV1
             if (!conversation) {
                 if (right)
                 {
-                    if (bm.GetPixel(playerBox.Location.X + 70, playerBox.Location.Y + 64) != Color.FromArgb(255, 204, 153, 102)
-                    || bm.GetPixel(playerBox.Location.X + 70, playerBox.Location.Y) != Color.FromArgb(255, 204, 153, 102))
+                    if (bm.GetPixel(playerBox.Location.X + 36, playerBox.Location.Y + 66) != Color.FromArgb(255, 204, 153, 102)
+                    || bm.GetPixel(playerBox.Location.X + 36, playerBox.Location.Y) != Color.FromArgb(255, 204, 153, 102))
                     {
                         playerBox.Location = new Point(playerBox.Location.X - movementSpeed, playerBox.Location.Y);
                     }
@@ -271,8 +271,8 @@ namespace GameV1
                         playerBox.Left += movementSpeed;
                     }
 
-                    if (bm.GetPixel(playerBox.Location.X - 3, playerBox.Location.Y + 64) != Color.FromArgb(255, 204, 153, 102)
-                        || bm.GetPixel(playerBox.Location.X - 3, playerBox.Location.Y) != Color.FromArgb(255, 204, 153, 102))
+                    if (bm.GetPixel(playerBox.Location.X - 5, playerBox.Location.Y + 66) != Color.FromArgb(255, 204, 153, 102)
+                        || bm.GetPixel(playerBox.Location.X - 5, playerBox.Location.Y) != Color.FromArgb(255, 204, 153, 102))
                     {
                         playerBox.Location = new Point(playerBox.Location.X + movementSpeed, playerBox.Location.Y);
                         return;
@@ -286,7 +286,7 @@ namespace GameV1
                 }
                 if (up)
                 {
-                    if (bm.GetPixel(playerBox.Location.X + 32, playerBox.Location.Y - 1) != Color.FromArgb(255, 204, 153, 102))
+                    if (bm.GetPixel(playerBox.Location.X + 36, playerBox.Location.Y - 1) != Color.FromArgb(255, 204, 153, 102))
                     {
                         playerBox.Location = new Point(playerBox.Location.X, playerBox.Location.Y + movementSpeed);
                     }
@@ -297,7 +297,7 @@ namespace GameV1
                 }
                 if (down)
                 {
-                    if (bm.GetPixel(playerBox.Location.X + 34, playerBox.Location.Y + 70) != Color.FromArgb(255, 204, 153, 102))
+                    if (bm.GetPixel(playerBox.Location.X + 36, playerBox.Location.Y + 66) != Color.FromArgb(255, 204, 153, 102))
                     {
                         playerBox.Location = new Point(playerBox.Location.X, playerBox.Location.Y - movementSpeed);
                     }
